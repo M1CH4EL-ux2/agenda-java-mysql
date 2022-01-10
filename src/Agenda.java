@@ -4,12 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Agenda {
 	
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
+	private static final String DATETIME_FORMAT = DATE_FORMAT + " " + "HH:mm:ss";
 	
 	public static LocalDate stringToDate(String dateText) {
 		LocalDate date = null;
@@ -23,9 +25,17 @@ public class Agenda {
 		return date;
 	}
 	
+	public static String dateToString(LocalDate dateText) {
+		return dateText.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+	}
+	
+	public static String dateTimeToString(LocalDateTime dateText) {
+		return dateText.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT));
+	}
+	
 	public void AdicionarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Adicione o nome:");
@@ -64,7 +74,7 @@ public class Agenda {
 	
 	public void DeletarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do usuário que vai ser deletado: ");
@@ -92,7 +102,7 @@ public class Agenda {
 	
 	public void AtualizarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do contato que deseja atualizar:");
@@ -122,7 +132,7 @@ public class Agenda {
 	
 	public void ConsultarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do contato que deseja consultar:");
@@ -138,26 +148,29 @@ public class Agenda {
 				String nomeContato = res.getString("nome");
 				String emailContato = res.getString("email");
 				int celular = res.getInt("celular");
-				//LocalDate nascimento = res.getInt("id");
-				//int id = res.getInt("id");
+				LocalDate nascimento = res.getObject("nascimento", LocalDate.class);
+				LocalDateTime cadastro = res.getObject("cadastro", LocalDateTime.class);
 				
 				System.out.println(" ");
 				System.out.println("id: " + id);
 				System.out.println("nome: " + nomeContato);
 				System.out.println("email: " + emailContato);
 				System.out.println("celular: " + celular);
+				System.out.println("nascimento: " + dateToString(nascimento));
+				System.out.println("cadastro: " + dateTimeToString(cadastro));
 				System.out.println(" ");
 				
 			}
 			
 		} catch (SQLException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
 	public void ListarContatos() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
 			Scanner teclado = new Scanner(System.in);
 			
 			PreparedStatement stmt = conect.prepareStatement("select * from contato");
@@ -169,20 +182,23 @@ public class Agenda {
 				String nomeContato = res.getString("nome");
 				String emailContato = res.getString("email");
 				int celular = res.getInt("celular");
-				//LocalDate nascimento = res.getInt("id");
-				//int id = res.getInt("id");
+				LocalDate nascimento = res.getObject("nascimento", LocalDate.class);
+				LocalDateTime cadastro = res.getObject("cadastro", LocalDateTime.class);
 				
 				System.out.println(" ");
 				System.out.println("id: " + id);
 				System.out.println("nome: " + nomeContato);
 				System.out.println("email: " + emailContato);
 				System.out.println("celular: " + celular);
+				System.out.println("nascimento: " + dateToString(nascimento));
+				System.out.println("cadastro: " + dateTimeToString(cadastro));
 				System.out.println(" ");
 				
 			}
 			
 		} catch (SQLException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
@@ -224,5 +240,4 @@ public class Agenda {
 			 }
 		 }
 	}
-	
 }
