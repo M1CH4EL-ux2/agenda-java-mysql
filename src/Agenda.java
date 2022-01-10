@@ -33,9 +33,22 @@ public class Agenda {
 		return dateText.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT));
 	}
 	
+	public Connection Connect() {
+		Connection connect = null;
+		
+		try {
+			connect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
+		} catch (SQLException e) {
+			// TODO: handle exception
+			System.out.println("Erro ao conectar ao banco de dados, verifique se suas informações estão corretas.");
+		}
+		
+		return connect;
+	}
+	
 	public void AdicionarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = Connect();
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Adicione o nome:");
@@ -68,13 +81,15 @@ public class Agenda {
 			}
 		} catch (SQLException e) {
 			// TODO: handle exception
-			e.printStackTrace();
+			System.out.println(" ");
+			System.out.println("Ocorreu algum erro ao tentar adicionar o contato, tente novamente.");
+			System.out.println(" ");
 		}
 	}
 	
 	public void DeletarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = Connect();
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do usuário que vai ser deletado: ");
@@ -96,13 +111,15 @@ public class Agenda {
 
 		} catch (SQLException e) {
 			// TODO: handle exception
-			e.printStackTrace();
+			System.out.println(" ");
+			System.out.println("Ocorreu algum erro ao tentar deletar o contato, tente novamente.");
+			System.out.println(" ");
 		}
 	}
 	
 	public void AtualizarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = Connect();
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do contato que deseja atualizar:");
@@ -126,13 +143,15 @@ public class Agenda {
 
 		} catch (SQLException e) {
 			// TODO: handle exception
-			e.printStackTrace();
+			System.out.println(" ");
+			System.out.println("Ocorreu algum erro ao tentar atualizar o contato, tente novamente.");
+			System.out.println(" ");
 		}
 	}
 	
 	public void ConsultarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = Connect();
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do contato que deseja consultar:");
@@ -164,13 +183,15 @@ public class Agenda {
 			
 		} catch (SQLException e) {
 			// TODO: handle exception
-			e.printStackTrace();
+			System.out.println(" ");
+			System.out.println("Ocorreu algum erro ao tentar consultar o contato, tente novamente.");
+			System.out.println(" ");
 		}
 	}
 	
 	public void ListarContatos() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = Connect();
 			Scanner teclado = new Scanner(System.in);
 			
 			PreparedStatement stmt = conect.prepareStatement("select * from contato");
@@ -198,7 +219,9 @@ public class Agenda {
 			
 		} catch (SQLException e) {
 			// TODO: handle exception
-			e.printStackTrace();
+			System.out.println(" ");
+			System.out.println("Ocorreu algum erro ao tentar listar os contatos, tente novamente.");
+			System.out.println(" ");
 		}
 	}
 	
