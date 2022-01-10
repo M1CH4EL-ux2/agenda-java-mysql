@@ -3,9 +3,24 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Agenda {
+	
+	private static final String DATE_FORMAT = "dd/MM/yyyy";
+	
+	public static LocalDate stringToDate(String dateText) {
+		LocalDate date = null;
+		
+		try {
+			date = LocalDate.parse(dateText, DateTimeFormatter.ofPattern(DATE_FORMAT));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return date;
+	}
 	
 	public void AddContato() {
 		try {
@@ -22,13 +37,15 @@ public class Agenda {
 			int celular = teclado.nextInt();
 			
 			System.out.println("Adicione a data de nascimento");
-			LocalDate nascimento = teclado.next();
+			LocalDate nascimento = stringToDate(teclado.next());
+			
+			System.out.println(nascimento);
 			
 			PreparedStatement stmt = conect.prepareStatement("insert into contato(nome, email, celular, nascimento) values(?, ?, ?, ?)");
 			stmt.setString(1, nome);
 			stmt.setString(2, email);
 			stmt.setInt(3, celular);
-			stmt.setString(4, nascimento);
+			stmt.setObject(4, nascimento);
 			
 			int res = stmt.executeUpdate();
 			
