@@ -24,7 +24,7 @@ public class Agenda {
 	
 	public void AdicionarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Adicione o nome:");
@@ -63,7 +63,7 @@ public class Agenda {
 	
 	public void DeletarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do usuário que vai ser deletado: ");
@@ -81,6 +81,36 @@ public class Agenda {
 			} else {
 				System.out.println("Erro ao deletar o contato... tente novamente");
 				DeletarContato();
+			}
+
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	public void AtualizarContato() {
+		try {
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
+			Scanner teclado = new Scanner(System.in);
+			
+			System.out.println("Informe o email do contato que deseja atualizar:");
+			String email = teclado.next();
+			
+			System.out.println("Informe o novo número deste contato:");
+			int celular = teclado.nextInt();
+			
+			PreparedStatement stmt = conect.prepareStatement("update contato set celular = ? where email = ?");
+			stmt.setInt(1, celular);
+			stmt.setString(2, email);
+			
+			int res = stmt.executeUpdate();
+			
+			if(res == 1) {
+				System.out.println("Contato atualizado com sucesso!");
+			} else {
+				System.out.println("Erro ao atualizar conttato... tente novamente");
+				AtualizarContato();
 			}
 
 		} catch (SQLException e) {
@@ -114,6 +144,10 @@ public class Agenda {
 				 continue;
 			 } else if(opcao == 2) {
 				 crud.DeletarContato();
+				 continue;
+			 } else if(opcao == 3) {
+				 crud.AtualizarContato();
+				 continue;
 			 }
 		 }
 	}
