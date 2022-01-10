@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +25,7 @@ public class Agenda {
 	
 	public void AdicionarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Adicione o nome:");
@@ -63,7 +64,7 @@ public class Agenda {
 	
 	public void DeletarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do usuário que vai ser deletado: ");
@@ -91,7 +92,7 @@ public class Agenda {
 	
 	public void AtualizarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Informe o email do contato que deseja atualizar:");
@@ -116,6 +117,72 @@ public class Agenda {
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		}
+	}
+	
+	public void ConsultarContato() {
+		try {
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Scanner teclado = new Scanner(System.in);
+			
+			System.out.println("Informe o email do contato que deseja consultar:");
+			String email = teclado.next();
+			
+			PreparedStatement stmt = conect.prepareStatement("select * from contato where email = ?");
+			stmt.setString(1, email);
+			
+			ResultSet res = stmt.executeQuery();
+			
+			if(res.next()) {
+				int id = res.getInt("id");
+				String nomeContato = res.getString("nome");
+				String emailContato = res.getString("email");
+				int celular = res.getInt("celular");
+				//LocalDate nascimento = res.getInt("id");
+				//int id = res.getInt("id");
+				
+				System.out.println(" ");
+				System.out.println("id: " + id);
+				System.out.println("nome: " + nomeContato);
+				System.out.println("email: " + emailContato);
+				System.out.println("celular: " + celular);
+				System.out.println(" ");
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void ListarContatos() {
+		try {
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senhas");
+			Scanner teclado = new Scanner(System.in);
+			
+			PreparedStatement stmt = conect.prepareStatement("select * from contato");
+			
+			ResultSet res = stmt.executeQuery();
+			
+			while(res.next()) {
+				int id = res.getInt("id");
+				String nomeContato = res.getString("nome");
+				String emailContato = res.getString("email");
+				int celular = res.getInt("celular");
+				//LocalDate nascimento = res.getInt("id");
+				//int id = res.getInt("id");
+				
+				System.out.println(" ");
+				System.out.println("id: " + id);
+				System.out.println("nome: " + nomeContato);
+				System.out.println("email: " + emailContato);
+				System.out.println("celular: " + celular);
+				System.out.println(" ");
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
 		}
 	}
 	
@@ -148,9 +215,14 @@ public class Agenda {
 			 } else if(opcao == 3) {
 				 crud.AtualizarContato();
 				 continue;
+			 } else if(opcao == 4) {
+				 crud.ConsultarContato();
+				 continue;
+			 } else if(opcao == 5) {
+				 crud.ListarContatos();
+				 continue;
 			 }
 		 }
 	}
-	
 	
 }
