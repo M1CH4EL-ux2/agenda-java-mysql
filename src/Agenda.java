@@ -22,9 +22,9 @@ public class Agenda {
 		return date;
 	}
 	
-	public void AddContato() {
+	public void AdicionarContato() {
 		try {
-			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "senha");
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
 			Scanner teclado = new Scanner(System.in);
 			
 			System.out.println("Adicione o nome:");
@@ -53,8 +53,36 @@ public class Agenda {
 				System.out.println("Contato adicionado com sucesso");
 			} else {
 				System.out.println("Erro ao adicionar contato, tente novamente");
-				AddContato();
+				AdicionarContato();
 			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	public void DeletarContato() {
+		try {
+			Connection conect = DriverManager.getConnection("jdbc:mysql://localhost/agenda", "root", "M1ch4elux2");
+			Scanner teclado = new Scanner(System.in);
+			
+			System.out.println("Informe o email do usuário que vai ser deletado: ");
+			String email = teclado.next();
+			
+			PreparedStatement stmt = conect.prepareStatement("delete from contato where email = ?");
+			stmt.setString(1, email);
+			
+			int res = stmt.executeUpdate();
+			
+			System.out.println(res);
+			
+			if(res == 1) {
+				System.out.println("Contato deletado com sucesso!");
+			} else {
+				System.out.println("Erro ao deletar o contato... tente novamente");
+				DeletarContato();
+			}
+
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -82,8 +110,10 @@ public class Agenda {
 				 System.out.println("Encerrando sessão");
 				 break;
 			 } else if(opcao == 1) {
-				 crud.AddContato();
+				 crud.AdicionarContato();
 				 continue;
+			 } else if(opcao == 2) {
+				 crud.DeletarContato();
 			 }
 		 }
 	}
