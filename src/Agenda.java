@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Agenda {
@@ -18,8 +19,9 @@ public class Agenda {
 		
 		try {
 			date = LocalDate.parse(dateText, DateTimeFormatter.ofPattern(DATE_FORMAT));
-		} catch (Exception e) {
+		} catch (DateTimeParseException e) {
 			// TODO: handle exception
+			System.out.println("Erro ao formatar para o tipo Date");
 		}
 		
 		return date;
@@ -226,8 +228,7 @@ public class Agenda {
 	}
 	
 	public static void main(String[] args) {
-		 Scanner teclado = new Scanner(System.in);
-		 
+		 Scanner teclado = new Scanner(System.in);	 
 		 Agenda crud = new Agenda();
 		 
 		 while(true) {
@@ -245,6 +246,11 @@ public class Agenda {
 				 teclado.close();
 				 System.out.println("Encerrando sessão");
 				 break;
+			 } else if(opcao < 0 || opcao > 5) {
+				 System.out.println(" ");
+				 System.out.println("Opção invalida, escolha uma opção do menu.");
+				 System.out.println(" ");
+				 continue;
 			 } else if(opcao == 1) {
 				 crud.AdicionarContato();
 				 continue;
